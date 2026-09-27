@@ -1,0 +1,11 @@
+venv/
+dataset/
+model/
+
+__pycache__/
+*.pyc
+
+static/uploads/*
+
+.env
+.vscode/

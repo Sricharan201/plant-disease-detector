@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plant Disease Detector</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            color: #263238;
+        }
+
+        /* Header */
+        .header {
+            background: #2e7d32;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        /* Main container */
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 40px auto;
+        }
+
+        /* Main card */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #607d8b;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Upload area */
+        .upload-box {
+            border: 2px dashed #81c784;
+            border-radius: 15px;
+            padding: 30px;
+            background: #f9fff9;
+            margin-bottom: 20px;
+        }
+
+        .upload-box p {
+            margin-bottom: 15px;
+            color: #546e7a;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .choose-button {
+            display: inline-block;
+            background: #43a047;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .choose-button:hover {
+            background: #2e7d32;
+        }
+
+        /* Image preview */
+        #preview {
+            display: none;
+            max-width: 280px;
+            max-height: 280px;
+            margin: 20px auto;
+            border-radius: 12px;
+            object-fit: contain;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Predict button */
+        .predict-button {
+            width: 100%;
+            max-width: 350px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #1565c0;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .predict-button:hover {
+            background: #0d47a1;
+        }
+
+        /* Result */
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            background: #f1f8e9;
+            border-left: 6px solid #43a047;
+        }
+
+        .result h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .prediction {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1b5e20;
+            margin-bottom: 10px;
+        }
+
+        .confidence {
+            font-size: 17px;
+            color: #455a64;
+        }
+
+        /* Result image */
+        .result-image {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 20px;
+            border-radius: 12px;
+            object-fit: contain;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Try again button */
+        .try-again {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 22px;
+            background: #546e7a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .try-again:hover {
+            background: #37474f;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #607d8b;
+            font-size: 14px;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 25px 18px;
+            }
+
+            .prediction {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+
+        <h1>🌱 Plant Disease Detector</h1>
+
+        <p>
+            AI-powered plant leaf disease detection
+        </p>
+
+    </div>
+
+
+    <!-- Main content -->
+    <div class="container">
+
+        <div class="card">
+
+            <div class="icon">
+                🌿
+            </div>
+
+            <h2>
+                Analyze Your Plant Leaf
+            </h2>
+
+            <p class="description">
+                Upload a clear image of a plant leaf and let
+                the trained AI model analyze it.
+            </p>
+
+
+            <!-- Upload form -->
+            <form method="POST" enctype="multipart/form-data">
+
+                <div class="upload-box">
+
+                    <p>
+                        Select a plant leaf image
+                    </p>
+
+                    <label
+                        for="file"
+                        class="choose-button"
+                    >
+                        📷 Choose Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        required
+                    >
+
+                    <!-- Image preview -->
+                    <img
+                        id="preview"
+                        alt="Selected plant leaf preview"
+                    >
+
+                </div>
+
+
+                <!-- Predict button -->
+                <button
+                    type="submit"
+                    class="predict-button"
+                >
+                    🔍 Predict Disease
+                </button>
+
+            </form>
+
+
+            <!-- Prediction result -->
+            {% if prediction %}
+
+            <div class="result">
+
+                <h2>
+                    Prediction Result
+                </h2>
+
+                <div class="prediction">
+                    {{ prediction }}
+                </div>
+
+                {% if confidence %}
+
+                <div class="confidence">
+                    Confidence:
+                    <strong>{{ confidence }}%</strong>
+                </div>
+
+                {% endif %}
+
+
+                {% if image_path %}
+
+                <img
+                    src="{{ image_path }}"
+                    alt="Uploaded plant leaf"
+                    class="result-image"
+                >
+
+                {% endif %}
+
+
+                <br>
+
+                <a
+                    href="/"
+                    class="try-again"
+                >
+                    🔄 Try Another Image
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+
+        <p>
+            Plant Disease Detection using Deep Learning
+        </p>
+
+    </div>
+
+
+    <!-- Image preview JavaScript -->
+    <script>
+
+        const fileInput =
+            document.getElementById("file");
+
+        const preview =
+            document.getElementById("preview");
+
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                const file = this.files[0];
+
+                if (file) {
+
+                    const reader =
+                        new FileReader();
+
+                    reader.onload =
+                        function (event) {
+
+                            preview.src =
+                                event.target.result;
+
+                            preview.style.display =
+                                "block";
+                        };
+
+                    reader.readAsDataURL(file);
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
